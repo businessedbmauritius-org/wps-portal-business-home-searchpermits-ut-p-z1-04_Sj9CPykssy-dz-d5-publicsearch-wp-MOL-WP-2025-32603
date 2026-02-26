@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+<title>Mauritius Business Licensing Platform</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<style>
+    /* ===== GLOBAL STYLES ===== */
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #ffffff;
+    }
+
+    /* ===== MASTER CONTAINER ===== */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    /* ===== DESKTOP HEADER ===== */
+    .top-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+    }
+
+    .header-left img {
+        height: 60px;
+        object-fit: contain;
+    }
+
+    .header-center {
+        font-size: 15px;
+        color: #333;
+        flex: 1;
+        text-align: center;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .search-box {
+        position: relative;
+    }
+    .search-box input {
+        width: 220px;
+        padding: 8px 35px 8px 10px; /* Extra padding on right for icon */
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 13px;
+    }
+    
+    /* Search Icon converted to clickable link */
+    .search-icon-link {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #888;
+        font-size: 14px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .auth-links a {
+        text-decoration: none;
+        color: #2b6db9;
+        font-size: 13px;
+        margin-left: 15px;
+    }
+
+    /* ===== MOBILE HEADER & SIDEBAR (HIDDEN ON DESKTOP) ===== */
+    .mobile-header {
+        display: none;
+    }
+    .mobile-sidebar {
+        display: none;
+    }
+    .mobile-search-bar {
+        display: none;
+    }
+
+    /* ===== NAVIGATION BAR ===== */
+    .navbar-wrapper {
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 30px;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 40px;
+    }
+
+    .navbar a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #2b6db9;
+        font-size: 14px;
+        padding: 15px 10px;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -1px;
+        transition: 0.2s;
+    }
+
+    .navbar a:hover {
+        color: #1e4584;
+    }
+
+    .navbar a.active {
+        border-bottom: 3px solid #2b6db9;
+        font-weight: bold;
+    }
+
+    /* ===== MAIN CONTENT AREA (PERMIT CARD) ===== */
+    .permit-scroll-window {
+        background: #fff;
+        border: 1px solid #c0c0c0;
+        height: 500px;
+        overflow-y: scroll;
+        margin-bottom: 50px;
+    }
+
+    .ministry-title {
+        text-align: center;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 15px;
+        background-color: #f9f9f9;
+        border-bottom: 1px solid #e5e5e5;
+    }
+
+    .permit-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 25px;
+        font-weight: bold;
+        font-size: 14px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    
+    .permit-header .status {
+        color: #008000;
+    }
+
+    .permit-body {
+        padding: 25px;
+        font-size: 14px;
+        color: #222;
+        line-height: 1.6;
+    }
+
+    .top-info-block {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 80px;
+        margin-bottom: 20px;
+    }
+
+    .photo-preview {
+        height: 120px;
+        width: 100px;
+        object-fit: cover;
+        border: 1px solid #eee;
+    }
+
+    .mid-info-block {
+        margin-bottom: 20px;
+    }
+
+    .data-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0px;
+    }
+
+    .row-split {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .col-left {
+        width: 300px;
+    }
+
+    .conditions {
+        font-size: 13px;
+        color: #333;
+    }
+    .conditions p {
+        margin: 0 0 5px 0;
+    }
+    .conditions ol {
+        margin: 0;
+        padding-left: 15px;
+    }
+    .conditions li {
+        margin-bottom: 4px;
+    }
+
+    /* ===== FOOTER STYLES ===== */
+    .footer-container {
+        background-color: #404142; 
+        color: #a4a9ac;
+        display: flex;
+        padding: 40px;
+        gap: 60px;
+    }
+
+    .footer-brand {
+        width: 150px;
+        display: flex;
+        flex-direction: column;
+    }
+    .footer-brand img {
+        width: 150px;
+        margin-bottom: 5px;
+    }
+    .footer-brand p.success-story {
+        margin: 0 0 15px 0;
+        font-size: 13px;
+    }
+    .footer-brand .helpdesk {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+    .footer-brand .helpdesk a {
+        color: #a4a9ac;
+        text-decoration: none;
+    }
+    
+    /* Default visibility for Desktop */
+    .desktop-helpdesk { display: block; font-weight: bold; }
+    .mobile-helpdesk { display: none; }
+
+    .footer-links {
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+    }
+    
+    .footer-col h4 {
+        color: #a4a9ac;
+        margin: 0 0 15px 0;
+        font-size: 15px;
+        font-weight: normal;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .footer-col h4 i {
+        display: none;
+        transition: transform 0.3s ease;
+    }
+
+    .footer-col a, .footer-col .plain-text {
+        display: block;
+        color: #d1d1d1;
+        text-decoration: none;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .footer-col a:hover {
+        color: #fff;
+    }
+
+    .mobile-only-links {
+        display: none;
+    }
+    .mobile-footer-bottom {
+        display: none;
+    }
+
+/* =========================================
+       MOBILE RESPONSIVENESS
+       ========================================= */
+    @media screen and (max-width: 768px) {
+        
+        /* 1. Add padding so the content isn't hidden under the fixed header */
+        body {
+            padding-top: 85px; 
+        }
+
+        .top-header, .navbar-wrapper {
+            display: none !important;
+        }
+
+        /* 2. Top Bar - Made Fixed with Drop Shadow */
+        .mobile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background-color: #fff;
+            
+            /* Changed to fixed and added drop shadow */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Drop Shadow added here */
+        }
+        .mobile-header img {
+            height: 55px;
+        }
+        .mobile-header i {
+            font-size: 24px;
+            color: #3b73b9;
+            cursor: pointer;
+        }
+
+        /* 3. Mobile Dropdown Search Bar - Fixed below header */
+        .mobile-search-bar {
+            display: none; /* hidden by default */
+            padding: 10px 20px;
+            background-color: #fff;
+            
+            /* Changed to fixed and added drop shadow */
+            position: fixed;
+            top: 85px; /* Sits exactly below the 85px tall mobile header */
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Drop Shadow added here */
+        }
+        .mobile-search-bar.active {
+            display: block; /* Shown when toggled */
+        }
+        .mobile-search-bar input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #b3d4f5; 
+            border-radius: 4px;
+            font-size: 16px; 
+            outline: none;
+        }
+
+        /* Mobile Sidebar Drawer */
+        .mobile-sidebar {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100vh;
+            background-color: #fff;
+            z-index: 9999;
+            transition: left 0.3s ease-in-out;
+            overflow-y: auto;
+        }
+        .mobile-sidebar.open {
+            left: 0;
+        }
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+        }
+        .sidebar-header img {
+            height: 55px;
+        }
+        .sidebar-header .close-btn {
+            font-size: 18px;
+            color: #3b73b9;
+            border: 1px solid #3b73b9;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .sidebar-header .search-btn {
+            font-size: 24px;
+            color: #3b73b9;
+            cursor: pointer;
+        }
+        .sidebar-links {
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-links a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10px;
+            text-decoration: none;
+            color: #3b73b9;
+            font-size: 16px;
+            border-bottom: 1px solid #cce0f5; 
+        }
+        .sidebar-links a.active {
+            border-bottom: 3px solid #3b73b9; 
+        }
+        .sidebar-links a .left-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .sidebar-links a .left-content i {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+        .sidebar-links a.auth-link {
+            justify-content: flex-start;
+            padding-left: 20px;
+        }
+
+        /* Main content adjustments */
+        .permit-scroll-window {
+            height: auto;
+            overflow-y: visible;
+            border: none;
+            margin-bottom: 0;
+        }
+        .permit-header {
+            flex-direction: column;
+            gap: 10px;
+            padding: 15px 20px;
+        }
+        .permit-body {
+            padding: 15px 20px;
+        }
+        .top-info-block {
+            gap: 15px;
+            justify-content: space-between;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .row-split {
+            display: block;
+        }
+        .col-left {
+            width: 100%;
+        }
+
+        /* Footer dynamic changes */
+        .footer-container {
+            flex-direction: column;
+            padding: 0;
+            gap: 0;
+        }
+        .footer-brand {
+            width: 100%;
+            padding: 20px;
+        }
+        
+        /* Hiding image & Success Story text on Mobile */
+        .footer-brand img, .footer-brand p.success-story {
+            display: none;
+        }
+        
+        /* Swapping Helpdesk Contact text */
+        .desktop-helpdesk { display: none; }
+        .mobile-helpdesk { display: block; font-size: 15px; color: #fff; margin-bottom: 10px; }
+        
+        .footer-links {
+            flex-direction: column;
+        }
+        .footer-col {
+            border-top: 1px solid #737373; 
+        }
+        .footer-col h4 {
+            padding: 15px 20px;
+            margin: 0;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+        }
+        .footer-col h4 i {
+            display: inline-block;
+        }
+        .footer-links-list {
+            display: none; 
+            padding: 0 20px 15px 20px;
+        }
+        .footer-col.active .footer-links-list {
+            display: block;
+        }
+        .footer-col.active h4 i {
+            transform: rotate(180deg);
+        }
+        .mobile-only-links {
+            display: block;
+        }
+        .mobile-gap {
+            height: 40px;
+            border-top: 1px solid #737373;
+        }
+        .mobile-footer-bottom {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 25px 20px;
+            background-color: #38393a;
+            color: #fff;
+            font-size: 13px;
+        }
+        .mobile-footer-bottom img {
+            height: 50px;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="top-header">
+        <div class="header-left">
+            <img src="wps/contenthandler/business/!ut/p/digest!GEZHweTF0xv_oLsv8dYGZg/Images/Coat+of+Arms+of+Mauritius.png" alt="Republic of Mauritius">
+        </div>
+        <div class="header-center">
+            Mauritius Business Licensing Platform
+        </div>
+        <div class="header-right">
+            <div class="search-box">
+                <input type="text" placeholder="Search">
+                <a href="https://business.edbmauritius.org/wps/portal/business/home/search/!ut/p/z1/jZDNbsIwEISfxtfs8hMS9eZcogSkCFFE6kvlgJu4SmJr16GvX6oeKiSg7G1X38xoFhTUoEZ9tq0O1o26v-xvavWezOW8kClWVbbLcFthmZfr7QzzBA7XQPr6A-RZUsTrApfxAtQzerwzEp_TPwDUY_sDqOuIGw3-8yhBtb1rft8lx2aRtqDIfBgyFE10OXcheH4RKLCZ2I6GOTKnZtAT2WAnjhy1Ar88C_SOgu7_OIGdG4xANpqOnTc02MC3cjrHAeq79uCH_b7Gz7g_b-Q3QS-t0g!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/?search_query=" class="search-icon-link">
+                    <i class="fa fa-search"></i>
+                </a>
+            </div>
+            <div class="auth-links">
+                <a href="https://business.edbmauritius.org/wps/portal/business/home/register/!ut/p/z1/lVDfT8IwEP5beOjr7qQbLL4VI8sQMgkszL6YTutWs61N2-G_L0YTswgI93Z33698wKEA3om9qoRXuhPNYX_ik-fpmI1TFmOG-SbEdbYKF3OcU8wo7IaAeLuZ4TqZTdPoIcUwosAH_Luvd7a839LHBDG5-eHjiWF4Gf8MgF-V_y-An4-3Az60ONLAfxoL4FWjy--6WVfSuAJu5Zu00ga9PZxr7427JUiw7J3qpHOBfC1b0VvlVe8CbSuCH8YRNNp60fziCNa6lQSdFPalNtK2yrtjPrV2HoqT8mDaPM8LfI-a_ZKx0egT4lZHJA!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/#/user/registration">REGISTER</a>
+                <a href="https://business.edbmauritius.org/wps/portal/business/home/login/!ut/p/z1/lZFRT4MwEMc_yx76Sm8rOOJbJ0KYM5Vsy7AvpmiFGqCkLfPri9FkwW3q7u0uv__d_e8wxznmrdirUjilW1EP-SO_eprP6CylITC4WS8g81kUxVEGEE7xbgyEm08gWczT4C4FPyCYj_TbtQ8Zu_eXMcQEGPnWw5mg8D_9jwXZ6nZDHhKAZHqp_gjgF_k_Bvjv9naYj0ecuOBfPZaYl7Uuvt5F24KEJeZGvkojjdeboVw519lrBAiK3qpWWuvJl6IRvVFO9dbTpkTw3lkEnTZO1AcOQaUbicBKYZ6rTppGOXtqTqWtw_nZ9rhrtkPk8BbU-xWdTD4AnrzwBw!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/">LOGIN</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-header">
+        <i class="fa fa-ellipsis-v" id="openMenuBtn"></i>
+        <img src="wps/contenthandler/business/!ut/p/digest!GEZHweTF0xv_oLsv8dYGZg/Images/Coat+of+Arms+of+Mauritius.png" alt="Republic of Mauritius">
+        <i class="fa fa-search" id="mobileSearchToggleBtn"></i>
+    </div>
+    
+    <div class="mobile-search-bar" id="mobileSearchBar">
+        <form action="https://business.edbmauritius.org/wps/portal/business/home/search/!ut/p/z1/jZDNbsIwEISfxtfs8hMS9eZcogSkCFFE6kvlgJu4SmJr16GvX6oeKiSg7G1X38xoFhTUoEZ9tq0O1o26v-xvavWezOW8kClWVbbLcFthmZfr7QzzBA7XQPr6A-RZUsTrApfxAtQzerwzEp_TPwDUY_sDqOuIGw3-8yhBtb1rft8lx2aRtqDIfBgyFE10OXcheH4RKLCZ2I6GOTKnZtAT2WAnjhy1Ar88C_SOgu7_OIGdG4xANpqOnTc02MC3cjrHAeq79uCH_b7Gz7g_b-Q3QS-t0g!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/?search_query=" method="GET">
+            <input type="text" placeholder="" name="query">
+        </form>
+    </div>
+
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="sidebar-header">
+            <div class="close-btn" id="closeMenuBtn">
+                <i class="fa fa-times"></i>
+            </div>
+            <img src="wps/contenthandler/business/!ut/p/digest!GEZHweTF0xv_oLsv8dYGZg/Images/Coat+of+Arms+of+Mauritius.png" alt="Republic of Mauritius">
+            <i class="fa fa-search search-btn"></i>
+        </div>
+        
+        <div class="sidebar-links">
+            <a href="https://business.edbmauritius.org/wps/portal/business/!ut/p/z1/nZHLboMwEEW_pQtv4wFDgrqDUhBJKhpBFOpNZVoXXPGSbdLfL6iVmoSkr9nN3HPnSjOY4gzThu1FwbRoG1YN_QOdPy5M14xcB-LYSzzYrNI5MRLLBLDx7hhw0hEIvUVkryKwbILpoQw3o2zFvh_4GwDH-PTDhXLhd_4TIF7fpuQ-BAiNE_82sQb5zloGEBCIycQ_Af6TfwjQP91vCtDvz7PD9DjizAd-2rHEtKja_OPdbpMTp8BU8hcuuZz1chiXWnfqGgGCvFei4UrN-HNes14KLXo1a2WB4K1TCLpWalZ9cQjKtuYIFGfyqey4rIVW53LKVmmcXVyPu3o7VgavdrVfu1fvea4S3w!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/">
+                <div class="left-content"><i class="fa fa-home"></i> Home</div>
+                <i class="fa fa-caret-right"></i>
+            </a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/licensing/!ut/p/z1/lZFfT4MwFMU_iw99pZcVtuobiBA2DVtgGfbFgFZowr-0Rb--EE0mspF439rzO-fk5mKGU8ya7EMUmRZtk1XD-5mtXzYrZxU6FCKaxC4cAncT2rsQrFsLn6YA3I9A9PiQkH0AEJiYTeRjbA3yk7X1wScQkZl_BrB5vBV5nu8dAKh5uf83MPFH7ijvkjUxY2sFYP_1zwH2r_3nwOiHK-PA4GeLFTb5ARYy2OKS1MZbzIqqzb_v6TQ5oQVmkr9zyaXRy-G71LpTdwgQ5L0SDVfK4G95nfVSaNEro5UFgs9OIehaqbPqzCEo25ojUDyTr2XHZS20utRTtkrj9Go87urjMCmIfX2iyrn5AvNeRgs!/dz/d5/L2dBISEvZ0FBIS9nQSEh/">
+                <div class="left-content"><i class="fa fa-file-alt"></i> Licensing</div>
+                <i class="fa fa-caret-right"></i>
+            </a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/searchpermits/!ut/p/z1/lZJPU4MwEMU_DVeyhdBGbyDC0OrQDu0Uc3FAI2SGf5ME_fpCPWhBQPeWvPfbt7MJoihGtEreeZYoXldJ0Z2f6Pp5Y9hGYBMI4S5y4BA-3B_NvQ_gr9B5yUA7GSbKhhF_inDHP-KtB54JoXnhB-1x6LqeewAgE_k_DVd86PTy7rg2VxE2AKwhPzZc8eTYy76zCaxdAPgGD_mxgf5rfwPeMv-WP7PgRZ7OWvoJlt6Qzi6ZWGiLaFbU6dd_sqvUJBmigr0xwYTeiu46V6qRtxpokLaSV0xKnb2mZdIKrngr9VpkGnw0UoOmFiopvn0a5HXJNJAsES95w0TJlfwtJ6-lQvFke9SUp0vFwPflmchPRc8gyQ!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/#/publicsearch" class="active">
+                <div class="left-content"><i class="fa fa-user"></i> Search Permits</div>
+                <i class="fa fa-caret-right"></i>
+            </a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/news/!ut/p/z1/pZLNUoMwFIWfpQu25NJAi-5AhKHVoR3ogNk4oBEyw98kQV9fGBYWaVHHu0tyvnNyb4IIShCp03eWp5I1dVr26yeyed6urbVvmRCYUWjD0bO3vrH3QdcMFE8FcDcIgof7CB88AE9D5G_8KdR7_lHfueBiCPCUH-31wHFc5whgapfzzwUTPrCH4320wVqorwFm-XPB0v1v9O_8XECWx7PMG_h3PFwpC_6Xr439L9jHiCyOaOjgJw-y-EimgXaI5GWTjf_RqjNs5ohw-kY55WrH--1CylbcKqBA1glWUyFU-ppVaceZZJ1QG54r8NEKBdqGy7T80ilQNBVVQNCUvxQt5RWT4lJO0QiJkqv2qK1OYyXADlVsCmu1-gTjfuAU/dz/d5/L2dBISEvZ0FBIS9nQSEh/">
+                <div class="left-content"><i class="fa fa-newspaper"></i> News</div>
+                <i class="fa fa-caret-right"></i>
+            </a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/faqs/!ut/p/z1/lZJdT4MwFIZ_ixfc0sPXht6BCLJp2AILszcGtEITvtIW_fuybImSbtX1ru3znvf0PUUY7RHuik9aFYL2XdFM-xe8eF2anhl7LiRulvqwjfxl7KxjsB9tlM8BuD8AydNDZm0igMhAWKE3HEm_S-1J_2yvQggtSKy5_ljeToIgDLYArnHe_zcw0yf-4XqdLSwjtU0AyV8GVP3fSu-XAayOR613rP_lBxeWB1fmLwP4qvnLAFa3lyOstDgk8FcNrByy66AVwlXTl8f_7HWl5VYIM_JBGGH6yKbjWoiB32mgQTly2hHOdfJetsXIqKAj13tWafA1cA2Gnomi-eE0qPuWaMBJwd7qgbCWCn7Op-65QPuL5dHQ7k5rD3TT5i73br4BS5Km8w!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/">
+                <div class="left-content"><i class="fa fa-info-circle"></i> FAQ's & Notices</div>
+                <i class="fa fa-caret-right"></i>
+            </a>
+            
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/register/!ut/p/z1/hZJdT4MwFIZ_Dbf0AGVD70CEsWnYMhawNwa0QhO-0hb9-4KaqLB1vWvP-_TpaYsIyhBp83dW5pJ1bV6P8yeyel6brhm5DsRwOmI4xI94G0BgQWyhdBa4O3pj4OE-sfYhQGgg8rfsJFM59NaRvYsAG_aCXwgmHi4MF877cez7gX8AcNT-GzznY28K7JKVZRyxCWD_56_2vxQQ9fWoecNWnn-Dr_CbmX_ZXoqIUmFbPwHFGxClxLHRFpGy7orv_-S2heWUiHD6Rjnl-sDH5UrKXtxqoEExCNZSIXT6WjT5wJlkg9A7Xmrw0QsN-o7LvP7NaVB1DdVA0Jy_VD3lDZPinKfqhETZxe1R35y-RgZs36SO-AS_nQYG/dz/d5/L2dBISEvZ0FBIS9nQSEh/#/user/registration" class="auth-link">REGISTER</a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/login/!ut/p/z1/jZJNU4MwEIZ_iweuZCmhjd6oWPqhQzvQKebigEbITPmYJOjfF8bOiLQN3dtm98m77yaIohjRMvniWaJ4VSbHNn-l07fZxJ2sXAIBPIZz2OHA8xbeDoBY6HCpIXh-iuytD-BbiPbLJOrK_ny2cjYrwJZzxu9D3PIveL2AhQ2B_Z-_Ub_f0PFwJVwY8sG84zfR1LZCPAFwBvpn4w34gcF7fGn-_nr0vOVo97fEI_xyoH9uT8879m3-NQse5anWYjfB2BtSrUnioDWi2bFKf_-zW6Y2yRAV7JMJJsxGtMe5UrV8MMCAtJG8ZFKa7CMtkkZwxRtpViIz4LuWBtSVUMnxr8-AvCqYAZIl4j2vmSi4kpd08koqFF-9HtXF_hQx8G1xINK9-wFQbUlY/dz/d5/L2dBISEvZ0FBIS9nQSEh/" class="auth-link">LOGIN</a>
+        </div>
+    </div>
+
+</div>
+
+<div class="navbar-wrapper">
+    <div class="container">
+        <div class="navbar">
+            <a href="https://business.edbmauritius.org/wps/portal/business/!ut/p/z1/lZJdT4MwFIZ_ixfc0gOUDb1jThibhi2wDHtjQCs0GR9pi_59IVsigw303LXnfc7H2yKCIkSK-IulsWRlER-b8yuZvc11W_dsC3x_ESxgtwlnhhZgHcBEh0sBPLYC__kpNLYugKsh0k1bYZt2F3PP3HiAtSG_D3DDv-C1A44BvnHJn8pjf7l0ljsAS7vevysg_5p_KGh5uBE29Pnegvf42vxde8Z5zRz1b4Un-FW__8Decd78o_8jBk3yZHTFdoKpNyCjj2yZaI1IeiyT03-2i8SwUkQ4_aSccrXmzXUmZSUeFFAgqQUrqBAq_UjyuOZMslqoJU8V-K6EAlXJZXz81SmQlTlVQNCYv2cV5TmT4lqfrBQSRTfLoyrfnyMCts0PlrDvfgCUSU0Q/dz/d5/L2dBISEvZ0FBIS9nQSEh/"><i class="fa fa-home"></i> Home</a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/licensing/!ut/p/z1/lZJdT4MwFIZ_Dbf0AGVD70CEsWnYAgvYGwNaoQlfaYv-fcGZKLKxeO7aPs95c06KCEoRabJ3VmSStU1WDecnsnpe67Ye2BaEVhw5cPCddWDuAsA3GCVTAO5GIHy4j429D-BriCz4mjnzjxEe_Ee89cAzIDSm_qk9Dl3Xcw8AlnY-_zcw8UNnfN7FK0OLsA4wy58D5F_zz4HRhwtlwxVfW87fXMvf4D_7m603QWQxwjS-gYUZyOKSLRNtESmqNj_9J7vJDatAhNM3yilXez5cl1J24lYBBfJesIYKodLXvM56ziTrhdryQoGPTijQtVxm1Q-nQNnWVAFBM_5SdpTXTIpzOWUrJEovtkddffyqFNi-TizxCX00DLA!/dz/d5/L2dBISEvZ0FBIS9nQSEh/"><i class="fa fa-file-alt"></i> Licensing</a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/searchpermits/!ut/p/z1/lZJNU4MwEIZ_iweuZPlq0RuIUFod2oFOMRcHNEJm-Jok6N8XrDNaENC9Jfs--ya7izCKEa6SN5olgtZVUnTnR7x6WquW6lsmBHAb2nAI7u8ibe8BeAo6LQlwl4aJsGDEH0O94x_0rQuuBoH2yQ_K64HjuM4BwJzw_ym44AO7T--ilaaEugpgDPmx4II3oz7t2Wvf2PmgX-tDfizA_-rfgFfm_TdL_puh_6i987yh_e3_MwNe5PGspH_B0g7h2SGbBtoinBV1et5nq0o1M0OYkVfCCJNb1l3nQjT8RgIJ0pbTinAuk5e0TFpGBW25XLNMgveGS9DUTCTFt06CvC6JBJwk7DlvCCup4L_55DUXKJ4sj5ry-BUx0H15Mrl19QHWnVUr/dz/d5/L2dBISEvZ0FBIS9nQSEh/#/publicsearch" class="active"><i class="fa fa-user"></i> Search Permits</a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/news/!ut/p/z1/lZJdT4MwGIV_ixfc0pevDb0DEWTTsAUWsDcGtEITvtIW_ftCtkQZG-h71_Y8PSenRRglCNfpJ81TQZs6Lfv1C169rlVL9S0TAjMKbdh79to3tj7oioHisQDuB0Hw9BBpOw_AUxD-H38I9Z5_1jcuuBoE2pg_Xq8HjuM6ewBTuez_WzDiA3s43kYrTQl1FWDiPxXM5b_Vz_mpAM_XEy8VPPBwZSxY4B_P_Sf1zvOG9rf8MwEXeTxb8ZBgqQM8-8imgTYI52WTHf-zVWeamSPMyAdhhMkd67cLIVp-J4EEWcdpTTiXyXtWpR2jgnZcblguwVfLJWgbJtLyRydB0VREAk5S9la0hFVU8Es-RcMFSq5ej9rqcJoE6K6KTW7dfAM5sGOL/dz/d5/L2dBISEvZ0FBIS9nQSEh/"><i class="fa fa-newspaper"></i> News</a>
+            <a href="https://business.edbmauritius.org/wps/portal/business/home/faqs/!ut/p/z1/lZJdT4MwFIZ_ixfc0sPXht6BCLJp2AILszcGtEITvtIW_fuybImSbtX1ru3znvf0PUUY7RHuik9aFYL2XdFM-xe8eF2anhl7LiRulvqwjfxl7KxjsB9tlM8BuD8AydNDZm0igMhAWKE3HEm_S-1J_2yvQggtSKy5_ljeToIgDLYArnHe_zcw0yf-4XqdLSwjtU0AyV8GVP3fSu-XAayOR613rP_lBxeWB1fmLwP4qvnLAFa3lyOstDgk8FcNrByy66AVwlXTl8f_7HWl5VYIM_JBGGH6yKbjWoiB32mgQTly2hHOdfJetsXIqKAj13tWafA1cA2Gnomi-eE0qPuWaMBJwd7qgbCWCn7Op-65QPuL5dHQ7k5rD3TT5i73br4BS5Km8w!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/"><i class="fa fa-info-circle"></i> FAQ's & Notices</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="permit-scroll-window">
+        
+        <div class="ministry-title">
+            Ministry of Labour and Industrial Relations
+        </div>
+
+        <div class="permit-header">
+            <div>Permit Number: MOL-WP-2026-32603</div>
+            <div>Status: <span class="status">Active</span></div>
+        </div>
+
+        <div class="permit-body">
+            
+            <div class="top-info-block">
+                <div>
+                    <strong>Surname:</strong> HOWLADER<br>
+                    <strong>First Name:</strong> Mithun<br>
+                    <strong>Nationality:</strong> Indian
+                </div>
+                <img src="wps/contenthandler/business/!ut/p/digest!GEZHweTF0xv_oLsv8dYGZg/Images/PERSON Image.jpg"Photo" class="photo-preview">
+            </div>
+
+            <div class="mid-info-block">
+                <strong>Name of Employer:</strong> FAST FOODS LIMITED<br>
+                <strong>Post Held:</strong> DRIVER
+            </div>
+
+            <div class="data-grid">
+                <div class="row-split">
+                    <div class="col-left"><strong>Passport Number:</strong><br>S6547113</div>
+                    <div><strong>Date of Birth:</strong> 03/03/1992</div>
+                </div>
+                <div class="row-split" style="margin-top: 10px;">
+                    <div class="col-left"><strong>Gender:</strong> Male</div>
+                    <div><strong>Validity: From</strong> 15/02/2026 <strong>To</strong><br>14/02/2029</div>
+                </div>
+            </div>
+
+            <div class="conditions" style="margin-top: 25px;">
+                <p><strong>Conditions:</strong></p>
+                <ol>
+                    <li>This permit is valid for the period indicated above.</li>
+                    <li>This permit is personal to the holder and is not transferable.</li>
+                    <li>The holder is NOT permitted to seek or accept alternative employment while in Mauritius or to engage in any trade, art or gainful occupation.</li>
+                    <li>This permit shall be kept by the holder and produced to any authorised person on demand or within three days after demand at such Police Station as may be specified by the authorised person at the time of the demand.</li>
+                    <li>The Minister for Employment may, at any time, vary or cancel this permit.</li>
+                    <li>In the event of any change of circumstances affecting the accuracy of particulars submitted at the time of applying for this permit, the holder shall, within fifteen days, notify particulars of such change to the Minister for Employment.</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="container footer-container">
+    
+    <div class="footer-brand">
+        <img src="wps/contenthandler/business/!ut/p/digest!GEZHweTF0xv_oLsv8dYGZg/Images/ISO-IEC-27001-2022+Red.png" alt="MSECB Certified">
+        <div class="helpdesk desktop-helpdesk">
+                        <a href="https://msecb.com/economic-development-board/">Success Story</a>
+        </div>
+        
+        <div class="helpdesk desktop-helpdesk">
+            Helpdesk Contact:<br>
+            <a href="https://edbmauritius.atlassian.net/servicedesk/customer/portal/13/user/login?destination=portal%2F13">Click Here</a>
+        </div>
+        
+        <div class="helpdesk mobile-helpdesk">
+            Helpdesk contact<br>
+            <a href="mailto:nels@edbmauritius.org">nels@edbmauritius.org</a>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <div class="footer-col">
+            <h4>Government Directory <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <a href="https://govmu.org/EN/Pages/default.aspx">Ministries</a>
+                <a href="https://govmu.org/EN/Pages/default.aspx">Departments</a>
+                <a href="https://govmu.org/EN/Pages/default.aspx">Parastatal Organisations</a>
+                <a href="https://govmu.org/EN/Pages/default.aspx">Other Bodies</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Legislations <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <a href="https://govmu.org/EN/infoservices/justiceanddefence/Pages/default.aspx">Justice & Defence</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Explore Mauritius <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <a href="https://govmu.org/EN/Pages/exploremauritius.aspx">History</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Media <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <a href="https://govmu.org/EN/Pages/ViewAllCommunique.aspx">Communiqués</a>
+            </div>
+        </div>
+        <div class="footer-col">
+            <h4>Other links <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <a href="https://govmu.org/EN/Pages/ViewAllNews.aspx">News</a>
+                <a href="https://govmu.org/EN/Pages/eservices.aspx">E-Services</a>
+                <a href="wps/contenthandler/business/!ut/p/digest!ETapmtQq99oM1wVMKML6gg/Docs/ISMS-POL+-+ISMS+Policy+v2.0.pdf">ISMS Policy</a>
+                <a href="wps/contenthandler/business/!ut/p/digest!ETapmtQq99oM1wVMKML6gg/Docs/ISMS-POL-Supplier_Relationships_Policy_v1.0.pdf">Supplier Relationship Policy</a>
+                <a href="https://business.edbmauritius.org/wps/portal/business/home/termsOfUse/!ut/p/z1/lZDBbsIwDIafJtfaaleodks7CRWQpglQO1-mVIQ2qE2qJIXXXxGHqRoM5putz98vGwhKIC1OqhZeGS3asf-k2dc85GHOE3xfZJsUP1ZZuHzL1iFyhGIKJNsLsEjnebzK8SWOgJ7Zxzs1AvSv_N8A_a0vgKYRNy545FgC1a2pru_iuoqSGsjKg7TSBoMdx433vXtlyLAanNLSuUDuq04MVnk1uMDYmuG5dwx7Y71ofziGjekkQy3P7pa-Mc5DedcKfbfblXiM29OafwMBrDIC/dz/d5/L2dBISEvZ0FBIS9nQSEh/">Terms of Use</a>
+                <a href="https://business.edbmauritius.org/wps/portal/business/home/privacyPolicy/!ut/p/z1/jZBNC8IwDIZ_Ta9LqM4Nb3WCTCciKs5epMO6VbZ2tJ3-fRUPIviVW8LzPiEBDjlwLc6qFF4ZLepbv-ODfUQZTVmMi0myGuFyltDpOMkozilsX4F4fQcmoygNZyn2wx7wf_L4oRj-l_8C8O_6LfDXFW8u-OWYAi9rUzzexXTRi0vgVh6llTbo7G1ced-6IUGCReeUls4F8lA0orPKq84FxpYEL60j2BrrRf3kCFamkQS1vLh3-so4D_lHK7TNZpPjKazPGbsCe1Gbuw!!/dz/d5/L2dBISEvZ0FBIS9nQSEh/">Privacy Policy</a>
+                <a href="wps/contenthandler/business/!ut/p/digest!ETapmtQq99oM1wVMKML6gg/Docs/BusinessContact.pdf">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="mobile-gap mobile-only-links"></div>
+        
+        <div class="footer-col mobile-only-links">
+            <h4>Privacy Statement <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <span class="plain-text">Privacy Statement text</span>
+            </div>
+        </div>
+        <div class="footer-col mobile-only-links">
+            <h4>Terms of Use <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <span class="plain-text">Terms of Use text</span>
+            </div>
+        </div>
+        <div class="footer-col mobile-only-links" style="border-bottom: 1px solid #737373;">
+            <h4>Legal <i class="fa fa-caret-down"></i></h4>
+            <div class="footer-links-list">
+                <span class="plain-text">Legal text</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mobile-footer-bottom">
+    <img src="wps/contenthandler/business/!ut/p/digest!GEZHweTF0xv_oLsv8dYGZg/Images/Coat+of+Arms+of+Mauritius.png" alt="Republic of Mauritius">
+    <span>Government of Mauritius</span>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // 1. Footer Accordion Logic
+        const footerHeaders = document.querySelectorAll('.footer-col h4');
+        footerHeaders.forEach(header => {
+            header.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    const parentCol = this.parentElement;
+                    document.querySelectorAll('.footer-col').forEach(col => {
+                        if (col !== parentCol) col.classList.remove('active');
+                    });
+                    parentCol.classList.toggle('active');
+                }
+            });
+        });
+
+        // 2. Mobile Sidebar Toggle Logic
+        const openMenuBtn = document.getElementById('openMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+
+        if (openMenuBtn && closeMenuBtn && mobileSidebar) {
+            openMenuBtn.addEventListener('click', function() {
+                mobileSidebar.classList.add('open');
+                document.body.style.overflow = 'hidden'; 
+            });
+
+            closeMenuBtn.addEventListener('click', function() {
+                mobileSidebar.classList.remove('open');
+                document.body.style.overflow = '';
+            });
+        }
+        
+        // 3. Mobile Search Dropdown Toggle Logic
+        const mobileSearchToggleBtn = document.getElementById('mobileSearchToggleBtn');
+        const mobileSearchBar = document.getElementById('mobileSearchBar');
+        
+        if (mobileSearchToggleBtn && mobileSearchBar) {
+            mobileSearchToggleBtn.addEventListener('click', function() {
+                mobileSearchBar.classList.toggle('active');
+                // Automatically focus the input when opened
+                if (mobileSearchBar.classList.contains('active')) {
+                    mobileSearchBar.querySelector('input').focus();
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>
